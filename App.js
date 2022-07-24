@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from "react-native";
+import Navigation from "./navigation/Index";
 
 // Instruct SplashScreen not to hide yet, we want to do this manually
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -116,25 +117,27 @@ function MainScreen() {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "plum",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Text
+    <Navigation>
+      <View
         style={{
-          color: "black",
-          fontSize: 30,
-          marginBottom: 15,
-          fontWeight: "bold",
+          flex: 1,
+          backgroundColor: "plum",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        Pretty Cool!
-      </Text>
-      <Button title="Run Again" onPress={onReloadPress} />
-    </View>
+        <Text
+          style={{
+            color: "black",
+            fontSize: 30,
+            marginBottom: 15,
+            fontWeight: "bold",
+          }}
+        >
+          Pretty Cool!
+        </Text>
+        <Button title="Run Again" onPress={onReloadPress} />
+      </View>
+    </Navigation>
   );
 }
