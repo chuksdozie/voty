@@ -1,4 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import * as Updates from "expo-updates";
 import {
   Animated,
   Button,
@@ -8,17 +10,47 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from "react-native";
+import OptionTag from "../components/OptionTag";
 
 // import { Text, View } from "../components/Themed";
 
 export default function Home({ navigation }) {
+  const onReloadPress = useCallback(() => {
+    if (Platform.OS === "web") {
+      location.reload();
+    } else {
+      Updates.reloadAsync();
+    }
+  }, []);
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.headerSpacer}>
+    <View style={styles.container}>
+      <View style={styles.headerSpacer}></View>
+      {/* <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
+      </View> */}
+      <View style={styles.mainContainer}>
+        <View style={styles.header}>
+          {/* <Image source={}/> */}
+          <Text style={styles.nameText}>I am here to</Text>
+          <View style={styles.optionContainer}>
+            <OptionTag />
+            <OptionTag />
+          </View>
+        </View>
       </View>
-
+      {/* <View style={styles.headerContainer}>
+        <Text style={styles.nameText}>Justina Bornson</Text>
+        <View
+          style={{
+            borderWidth: 0.5,
+            borderColor: "white",
+            marginVertical: 5,
+          }}
+        ></View>
+        <Text style={styles.role}>Adminis</Text>
+      </View>
       <TouchableOpacity onPress={() => navigation.navigate("Next")}>
         <View style={styles.headerContainer}>
           <Text style={styles.nameText}>Justina Bornson</Text>
@@ -29,42 +61,75 @@ export default function Home({ navigation }) {
               marginVertical: 5,
             }}
           ></View>
-          <Text style={styles.role}>Admini</Text>
+          <Text style={styles.role}>Adminis</Text>
         </View>
-      </TouchableOpacity>
-    </ScrollView>
+      </TouchableOpacity> */}
+
+      {/* <View
+        style={{
+          flex: 1,
+          backgroundColor: "plum",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text
+          style={{
+            color: "black",
+            fontSize: 30,
+            marginBottom: 15,
+            fontWeight: "bold",
+          }}
+        >
+          Pretty Cool!
+        </Text>
+        <Button title="Run Again" onPress={onReloadPress} />
+      </View> */}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // backgroundColor: "red",
-    // alignItems: "center",
-    // justifyContent: "center",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#6e7a6e",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
   },
   headerSpacer: {
-    flex: 1,
+    display: "flex",
+    width: "100%",
     // backgroundColor: "orange",
-    marginTop: 50,
-    height: 100,
+    marginTop: 100,
+    height: 10,
     alignItems: "center",
     justifyContent: "center",
   },
-  headerContainer: {
-    flex: 1,
-    backgroundColor: "#86c0c6",
-    height: 100,
-    width: "90%",
+  mainContainer: {
+    display: "flex",
+    backgroundColor: "whitesmoke",
+    height: "100%",
+    width: "100%",
     alignSelf: "center",
-    borderRadius: 10,
     // alignItems: "center",
     justifyContent: "center",
   },
+  optionContainer: {
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: "whitesmoke",
+    width: "100%",
+    alignSelf: "center",
+    // alignItems: "center",
+    justifyContent: "space-evenly",
+    marginVertical: 30,
+  },
   nameText: {
-    fontSize: 23,
+    fontSize: 21,
     textAlign: "center",
-    fontWeight: "bold",
+    fontWeight: "400",
     // justifyContent: "center",
   },
   role: {
