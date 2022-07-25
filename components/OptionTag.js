@@ -15,7 +15,8 @@ import {
 
 // import { Text, View } from "../components/Themed";
 
-export default function OptionTag({ navigation }) {
+export default function OptionTag(props) {
+  const { navigation, label, icon, onPress } = props;
   const onReloadPress = useCallback(() => {
     if (Platform.OS === "web") {
       location.reload();
@@ -23,28 +24,30 @@ export default function OptionTag({ navigation }) {
       Updates.reloadAsync();
     }
   }, []);
-  return <View style={styles.container}></View>;
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+      <View style={styles.container}>
+        <Ionicons name={icon} size={50} style={styles.icon} />
+        <View style={styles.bottom}>
+          <Text style={styles.subText}>{label}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "#6e7a6e",
+    // backgroundColor: "#6e7a6e",
     alignItems: "center",
-    justifyContent: "center",
-    width: 150,
-    height: 170,
+    justifyContent: "flex-end",
+    width: 130,
+    height: 150,
     borderRadius: 8,
-  },
-  headerSpacer: {
-    display: "flex",
-    width: "100%",
-    // backgroundColor: "orange",
-    marginTop: 100,
-    height: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#6e7a6e",
   },
   mainContainer: {
     display: "flex",
@@ -55,10 +58,27 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     justifyContent: "center",
   },
-  nameText: {
-    fontSize: 21,
+  bottom: {
+    display: "flex",
+    backgroundColor: "orange",
+    // height: 20,
+    width: "100%",
+    paddingVertical: 10,
+    alignSelf: "flex-end",
+    // alignItems: "center",
+    justifyContent: "center",
+    borderBottomEndRadius: 8,
+    borderBottomStartRadius: 8,
+  },
+  icon: {
+    marginBottom: 10,
+    color: "#6e7a6e",
+  },
+  subText: {
+    fontSize: 16,
     textAlign: "center",
     fontWeight: "400",
+    color: "#6e7a6e",
     // justifyContent: "center",
   },
   role: {

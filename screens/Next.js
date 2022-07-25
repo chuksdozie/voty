@@ -18,7 +18,7 @@ export default function Next({ navigation }) {
       <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <View style={styles.headerContainer}>
           <Text style={styles.nameText}>Justina Bornson</Text>
           <View

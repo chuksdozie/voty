@@ -11,6 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  TextInput,
 } from "react-native";
 import OptionTag from "../components/OptionTag";
 
@@ -28,8 +29,13 @@ export default function Home({ navigation }) {
     <View style={styles.container}>
       <View style={styles.headerSpacer}></View>
       <View style={styles.logo}>
-        <Ionicons name="pie-chart" color={"#6e7a6e"} size={30} />
-        <Text style={styles.logoText}>Voty</Text>
+        <Ionicons
+          name="caret-back-circle-outline"
+          color={"#6e7a6e"}
+          size={30}
+          onPress={() => navigation.goBack()}
+        />
+        {/* <Text style={styles.logoText}>Back</Text> */}
       </View>
       {/* <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
@@ -37,62 +43,22 @@ export default function Home({ navigation }) {
       <View style={styles.mainContainer}>
         <View style={styles.header}>
           {/* <Image source={}/> */}
-          <Text style={styles.nameText}>I am here to</Text>
-          <View style={styles.optionContainer}>
-            <OptionTag
-              label="Place a vote"
-              icon="checkmark-done"
-              onPress={() => navigation.navigate("Vote")}
-            />
-            <OptionTag label="View results" icon="bar-chart-outline" />
-          </View>
+          <Text style={styles.nameText}>Please enter your voting ID</Text>
+          <TextInput
+            style={styles.inputBox}
+            placeholder={"Example: VXD-7w84d"}
+            textAlign="center"
+            selectionColor={"#6e7a6e"}
+          />
+          <Text style={styles.subText}>
+            Please note that, you won't be allowed to vote twice.{"\n"} So be
+            sure to vote only when you are ready.
+          </Text>
+          <TouchableOpacity style={styles.submitButton} activeOpacity={0.8}>
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      {/* <View style={styles.headerContainer}>
-        <Text style={styles.nameText}>Justina Bornson</Text>
-        <View
-          style={{
-            borderWidth: 0.5,
-            borderColor: "white",
-            marginVertical: 5,
-          }}
-        ></View>
-        <Text style={styles.role}>Adminis</Text>
-      </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Next")}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.nameText}>Justina Bornson</Text>
-          <View
-            style={{
-              borderWidth: 0.5,
-              borderColor: "white",
-              marginVertical: 5,
-            }}
-          ></View>
-          <Text style={styles.role}>Adminis</Text>
-        </View>
-      </TouchableOpacity> */}
-
-      {/* <View
-        style={{
-          flex: 1,
-          backgroundColor: "plum",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{
-            color: "black",
-            fontSize: 30,
-            marginBottom: 15,
-            fontWeight: "bold",
-          }}
-        >
-          Pretty Cool!
-        </Text>
-        <Button title="Run Again" onPress={onReloadPress} />
-      </View> */}
     </View>
   );
 }
@@ -115,9 +81,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  header: {
+    display: "flex",
+    width: "100%",
+    // backgroundColor: "orange",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   logo: {
     display: "flex",
     flexDirection: "row",
+    // justifyContent: "flex-end",
     alignItems: "center",
     width: "100%",
     backgroundColor: "whitesmoke",
@@ -150,10 +124,48 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginVertical: 30,
   },
+  submitButton: {
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: "#6e7a6e",
+    paddingVertical: 15,
+    width: "70%",
+    alignSelf: "center",
+    // alignItems: "center",
+    justifyContent: "space-evenly",
+    marginVertical: 30,
+    borderRadius: 30,
+  },
+  inputBox: {
+    height: 70,
+    width: "90%",
+    margin: 12,
+    borderWidth: 1,
+    borderColor: "#6e7a6e",
+    padding: 10,
+    borderRadius: 8,
+    fontSize: 20,
+    color: "#6e7a6e",
+  },
   nameText: {
     fontSize: 21,
     textAlign: "center",
     fontWeight: "400",
+    color: "#6e7a6e",
+    // justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 17,
+    textAlign: "center",
+    fontWeight: "400",
+    color: "whitesmoke",
+    // justifyContent: "center",
+  },
+  subText: {
+    fontSize: 13,
+    textAlign: "center",
+    fontWeight: "400",
+    color: "brown",
     // justifyContent: "center",
   },
   role: {

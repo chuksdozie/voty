@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import Home from "../screens/Home";
 import Next from "../screens/Next";
+import Vote from "../screens/Vote";
 
 export default function Navigation({ colorScheme }) {
   return (
@@ -34,6 +35,7 @@ function RootNavigator() {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Vote" component={Vote} />
       <Stack.Screen name="Next" component={Next} />
       {/* <Stack.Screen
         name="NotFound"
