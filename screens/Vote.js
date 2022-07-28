@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import registeredVotersData from "../data/registeredVotersData";
 import * as Updates from "expo-updates";
 import {
   Animated,
@@ -22,9 +23,35 @@ import OptionTag from "../components/OptionTag";
 
 export default function Home({ navigation }) {
   // possible values [ default, voting, feeadback ]
-  const [stage, setStage] = useState("voting");
+  const [stage, setStage] = useState("default");
+  const [error, setError] = useState("");
   const [confirm, setConfirm] = useState(true);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [voterId, setVoterId] = useState("");
+  const [voter, setVoter] = useState();
+  const getAllVoterIds = (value) => {
+    if (!value) {
+      setError("Please enter a voter ID");
+      setErrorModalVisible(true);
+      return;
+    }
+    let voterIds = [];
+    for (let i = 0; i < registeredVotersData.length; i++) {
+      voterIds.push(registeredVotersData[i].voterId);
+      console.log(registeredVotersData[i].voterId);
+      if (registeredVotersData[i].voterId === value) {
+        setVoter(registeredVotersData[i]);
+      }
+    }
+    console.log("free", voterIds);
+    if (!voterIds.includes(value)) {
+      setError("No Record for this voter found");
+      setErrorModalVisible(true);
+    } else {
+      setStage("voting");
+    }
+  };
   const onReloadPress = useCallback(() => {
     if (Platform.OS === "web") {
       location.reload();
@@ -32,6 +59,15 @@ export default function Home({ navigation }) {
       Updates.reloadAsync();
     }
   }, []);
+  const handleVoterIdChange = (e) => {
+    console.log(e);
+    setVoterId(e);
+    console.log(voterId);
+  };
+  const submitVoterId = () => {
+    getAllVoterIds(voterId);
+    console.log(error);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.headerSpacer}></View>
@@ -43,7 +79,9 @@ export default function Home({ navigation }) {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text style={styles.logoText}>Welcome Jones</Text>
+        <Text style={styles.logoText}>{`Good day, ${
+          voter?.firstName || ""
+        }`}</Text>
       </View>
       {/* <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
@@ -58,6 +96,8 @@ export default function Home({ navigation }) {
               placeholder={"Example: VXD-7w84d"}
               textAlign="center"
               selectionColor={"#6e7a6e"}
+              value={voterId}
+              onChangeText={(e) => handleVoterIdChange(e)}
             />
             <Text style={styles.subText}>
               Please note that, you won't be allowed to vote twice.{"\n"} So be
@@ -66,11 +106,36 @@ export default function Home({ navigation }) {
             <TouchableOpacity
               style={styles.submitButton}
               activeOpacity={0.8}
-              onPress={() => setStage("voting")}
+              onPress={() => submitVoterId()}
             >
               <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
           </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={errorModalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!errorModalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Error</Text>
+                <Text style={styles.modalText}>{error}</Text>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    setErrorModalVisible(!errorModalVisible);
+                    setError("");
+                  }}
+                >
+                  <Text style={styles.textStyle}>Try Again</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
         </View>
       ) : stage === "voting" ? (
         <View style={styles.mainContainer}>
@@ -113,12 +178,27 @@ export default function Home({ navigation }) {
           >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Hello World!</Text>
+                <Text style={styles.modalText}>
+                  Are you sure you want to vote for Peter Obi?
+                </Text>
+                <Text style={styles.modalText}>
+                  Please be reminded that you wont be allowed to vote more than
+                  once.
+                </Text>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    setStage("feedback");
+                  }}
+                >
+                  <Text style={styles.textStyle}>Yes</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonCancel]}
                   onPress={() => setModalVisible(!modalVisible)}
                 >
-                  <Text style={styles.textStyle}>Hide Modal</Text>
+                  <Text style={styles.textStyle}>Not sure, Cancel</Text>
                 </Pressable>
               </View>
             </View>
@@ -273,7 +353,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: "80%",
-    height: 200,
+    height: "auto",
     margin: 20,
     backgroundColor: "white",
     borderRadius: 5,
@@ -292,12 +372,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    width: "100%",
+    marginBottom: 10,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#6e7a6e",
+  },
+  buttonCancel: {
+    backgroundColor: "#780f0f",
   },
   textStyle: {
     color: "white",
