@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import registeredVotersData from "../data/registeredVotersData";
+import { candidates } from "../data/candidatesData";
 import * as Updates from "expo-updates";
+
 import {
   Animated,
   Button,
@@ -15,9 +17,11 @@ import {
   TextInput,
   Alert,
   Modal,
+  StatusBar,
   Pressable,
 } from "react-native";
 import OptionTag from "../components/OptionTag";
+import Candidate from "../components/Candidate";
 
 // import { Text, View } from "../components/Themed";
 
@@ -30,6 +34,7 @@ export default function Home({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [voterId, setVoterId] = useState("");
   const [voter, setVoter] = useState();
+  const [selectedCandidate, setSelectedCandidate] = useState();
   const getAllVoterIds = (value) => {
     if (!value) {
       setError("Please enter a voter ID");
@@ -70,6 +75,12 @@ export default function Home({ navigation }) {
   };
   return (
     <View style={styles.container}>
+      <StatusBar
+        translucent={true}
+        backgroundColor="rgba(0,0,0,0)"
+        barStyle="dark-content"
+        showHideTransition="slide"
+      />
       <View style={styles.headerSpacer}></View>
 
       <View style={styles.logo}>
@@ -142,30 +153,22 @@ export default function Home({ navigation }) {
           <View style={styles.header}>
             {/* <Image source={}/> */}
             <Text style={styles.nameText}>Who would you like to vote for?</Text>
-            <View style={styles.optionContainer}>
-              <OptionTag
-                label="Peter Ob"
-                icon="person"
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-              <OptionTag
-                label="Tinubu Tinubu"
-                icon="person"
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-            </View>
-            <View style={styles.optionContainer}>
-              <OptionTag
-                label="Atiku Atiku"
-                icon="person"
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-              <OptionTag
-                label="Sowere Hinges"
-                icon="person"
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-            </View>
+            <ScrollView style={styles.optionContainer}>
+              {candidates.map((i) => (
+                <Candidate
+                  key={i.id}
+                  name={`${i.firstName} ${i.lastName}`}
+                  candidateId={i.candidateId}
+                  party={i.party}
+                  icon="person"
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    setSelectedCandidate(i);
+                    console.log(selectedCandidate);
+                  }}
+                />
+              ))}
+            </ScrollView>
           </View>
           <Modal
             animationType="slide"
@@ -179,7 +182,7 @@ export default function Home({ navigation }) {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <Text style={styles.modalText}>
-                  Are you sure you want to vote for Peter Obi?
+                  {`Are you sure you want to vote for ${selectedCandidate?.firstName} ${selectedCandidate?.lastName} of ${selectedCandidate?.party}?`}
                 </Text>
                 <Text style={styles.modalText}>
                   Please be reminded that you wont be allowed to vote more than
@@ -231,25 +234,26 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#6e7a6e",
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
     height: "100%",
+    // paddingTop: StatusBar.currentHeight,
   },
   headerSpacer: {
     display: "flex",
     width: "100%",
-    // backgroundColor: "orange",
-    marginTop: 100,
-    height: 10,
+    backgroundColor: "orange",
+    marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
   },
   header: {
     display: "flex",
     width: "100%",
-    // backgroundColor: "orange",
+    height: "75%",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 20,
   },
   logo: {
     display: "flex",
@@ -263,7 +267,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   logoText: {
-    fontSize: 20,
+    fontSize: 16,
     paddingHorizontal: 5,
     fontWeight: "500",
     color: "#6e7a6e",
@@ -279,13 +283,15 @@ const styles = StyleSheet.create({
   },
   optionContainer: {
     display: "flex",
-    flexDirection: "row",
-    backgroundColor: "whitesmoke",
+    // flexDirection: "row",
+    // backgroundColor: "red",
     width: "80%",
-    alignSelf: "center",
+    // alignSelf: "center",
     // alignItems: "center",
-    justifyContent: "space-evenly",
+    // justifyContent: "space-evenly",
     marginVertical: 10,
+    borderTopWidth: 1,
+    borderColor: "orange",
   },
   submitButton: {
     display: "flex",
@@ -311,7 +317,7 @@ const styles = StyleSheet.create({
     color: "#6e7a6e",
   },
   nameText: {
-    fontSize: 18,
+    fontSize: 15,
     textAlign: "center",
     fontWeight: "400",
     color: "#6e7a6e",
@@ -352,7 +358,7 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    width: "80%",
+    width: "90%",
     height: "auto",
     margin: 20,
     backgroundColor: "white",
@@ -390,7 +396,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    marginBottom: 15,
+    marginBottom: 17,
     textAlign: "center",
   },
 });
