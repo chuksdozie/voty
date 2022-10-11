@@ -1,8 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import registeredVotersData from "../data/registeredVotersData";
-import { candidates } from "../data/candidatesData";
+// import { candidates } from "../data/candidatesData";
 import * as Updates from "expo-updates";
+import axiosService from "../utils/axiosService";
+import { getVoters, getCandidates } from "../constants/urls";
+import { storeData } from "../utils/db";
+import { ActivityIndicator } from "react-native";
 
 import {
   Animated,
@@ -35,26 +39,51 @@ export default function Home({ navigation }) {
   const [voterId, setVoterId] = useState("");
   const [voter, setVoter] = useState();
   const [selectedCandidate, setSelectedCandidate] = useState();
-  const getAllVoterIds = (value) => {
-    if (!value) {
-      setError("Please enter a voter ID");
-      setErrorModalVisible(true);
-      return;
-    }
-    let voterIds = [];
-    for (let i = 0; i < registeredVotersData.length; i++) {
-      voterIds.push(registeredVotersData[i].voterId);
-      console.log(registeredVotersData[i].voterId);
-      if (registeredVotersData[i].voterId === value) {
-        setVoter(registeredVotersData[i]);
+  const [candidates, setCandidates] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const getAllVoterIds = async (value) => {
+    try {
+      setLoading(true);
+      if (!value) {
+        setError("Please enter a voter ID");
+        setErrorModalVisible(true);
+        setLoading(false);
+        return;
       }
-    }
-    console.log("free", voterIds);
-    if (!voterIds.includes(value)) {
-      setError("No Record for this voter found");
-      setErrorModalVisible(true);
-    } else {
+      const response = await axiosService.get(getVoters);
+      console.log(12112, response.data.data);
+      const voters = response.data.data;
+      const verifiedVoter = voters.filter((voter) => voter.voterId === value);
+      console.log(345678, verifiedVoter);
+      if (!verifiedVoter[0]) {
+        setError("No Record for this voter found");
+        setErrorModalVisible(true);
+        setLoading(false);
+        return;
+      }
+      await storeData(voter, JSON.stringify(verifiedVoter[0]));
       setStage("voting");
+      // console.log("free", voterIds);
+      // if (!voterIds.includes(value)) {
+      //   setError("No Record for this voter found");
+      //   setErrorModalVisible(true);
+      // } else {
+      //   setStage("voting");
+      // }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log("wahala dey o", error);
+    }
+  };
+
+  const getAllCandidates = async () => {
+    try {
+      const response = await axiosService.get(getCandidates);
+      console.log(response.data.data);
+      setCandidates(response.data.data);
+    } catch (error) {
+      console.log(error);
     }
   };
   const onReloadPress = useCallback(() => {
@@ -73,6 +102,11 @@ export default function Home({ navigation }) {
     getAllVoterIds(voterId);
     console.log(error);
   };
+
+  useEffect(() => {
+    // setCandidate
+    getAllCandidates();
+  }, []);
   return (
     <View style={styles.container}>
       <StatusBar
@@ -118,8 +152,12 @@ export default function Home({ navigation }) {
               style={styles.submitButton}
               activeOpacity={0.8}
               onPress={() => submitVoterId()}
+              disabled={loading}
             >
-              <Text style={styles.buttonText}>Submit</Text>
+              {loading && <ActivityIndicator color={"white"} />}
+              <Text style={styles.buttonText}>
+                {loading ? `Please wait...` : "Submit"}
+              </Text>
             </TouchableOpacity>
           </View>
           <Modal
@@ -154,19 +192,20 @@ export default function Home({ navigation }) {
             {/* <Image source={}/> */}
             <Text style={styles.nameText}>Who would you like to vote for?</Text>
             <ScrollView style={styles.optionContainer}>
-              {candidates.map((i) => (
+              {candidates.map((i, index) => (
                 <Candidate
-                  key={i.id}
-                  name={`${i.firstName} ${i.lastName}`}
+                  key={index}
+                  name={`${i.lastName} ${i.lastName}`}
                   candidateId={i.candidateId}
                   party={i.party}
                   icon="person"
                   onPress={() => {
                     setModalVisible(!modalVisible);
                     setSelectedCandidate(i);
-                    console.log(selectedCandidate);
+                    console.log(123456, selectedCandidate);
                   }}
                 />
+                // <Text>{i.lastName}</Text>
               ))}
             </ScrollView>
           </View>
@@ -193,6 +232,7 @@ export default function Home({ navigation }) {
                   onPress={() => {
                     setModalVisible(!modalVisible);
                     setStage("feedback");
+                    // call the vote route
                   }}
                 >
                   <Text style={styles.textStyle}>Yes</Text>
@@ -301,7 +341,7 @@ const styles = StyleSheet.create({
     width: "70%",
     alignSelf: "center",
     // alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     marginVertical: 30,
     borderRadius: 30,
   },
@@ -328,6 +368,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "400",
     color: "whitesmoke",
+    marginHorizontal: 5,
+
     // justifyContent: "center",
   },
   subText: {

@@ -82,51 +82,6 @@ export default function Home({ navigation }) {
           </View>
         </View>
       </View>
-      {/* <View style={styles.headerContainer}>
-        <Text style={styles.nameText}>Justina Bornson</Text>
-        <View
-          style={{
-            borderWidth: 0.5,
-            borderColor: "white",
-            marginVertical: 5,
-          }}
-        ></View>
-        <Text style={styles.role}>Adminis</Text>
-      </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Next")}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.nameText}>Justina Bornson</Text>
-          <View
-            style={{
-              borderWidth: 0.5,
-              borderColor: "white",
-              marginVertical: 5,
-            }}
-          ></View>
-          <Text style={styles.role}>Adminis</Text>
-        </View>
-      </TouchableOpacity> */}
-
-      {/* <View
-        style={{
-          flex: 1,
-          backgroundColor: "plum",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{
-            color: "black",
-            fontSize: 30,
-            marginBottom: 15,
-            fontWeight: "bold",
-          }}
-        >
-          Pretty Cool!
-        </Text>
-        <Button title="Run Again" onPress={onReloadPress} />
-      </View> */}
     </View>
   );
 }
