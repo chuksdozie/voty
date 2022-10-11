@@ -1,11 +1,16 @@
 export default ({ config }) => ({
   ...config,
-  icon:
-    "https://github.com/expo/expo/blob/master/templates/expo-template-blank/assets/icon.png?raw=true",
+  icon: "https://github.com/expo/expo/blob/master/templates/expo-template-blank/assets/icon.png?raw=true",
   splash: {
     image:
       "https://github.com/expo/expo/blob/master/templates/expo-template-blank/assets/splash.png?raw=true",
     resizeMode: "contain",
     backgroundColor: "#ffffff",
+  },
+  android: {
+    package: "com.devchuks.voty",
+  },
+  ios: {
+    bundleIdentifier: "com.devchuks.voty",
   },
 });
