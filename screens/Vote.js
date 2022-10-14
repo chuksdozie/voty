@@ -61,9 +61,10 @@ export default function Home({ navigation }) {
         setLoading(false);
         return;
       }
-      await storeData(voter, JSON.stringify(verifiedVoter[0]));
+      await storeData("voter", JSON.stringify(verifiedVoter[0]));
+      setVoter(verifiedVoter[0]);
       setStage("voting");
-      // console.log("free", voterIds);
+      console.log("free", verifiedVoter[0]);
       // if (!voterIds.includes(value)) {
       //   setError("No Record for this voter found");
       //   setErrorModalVisible(true);
@@ -107,6 +108,19 @@ export default function Home({ navigation }) {
     // setCandidate
     getAllCandidates();
   }, []);
+
+  const handleVote = async () => {
+    try {
+      const result = await axiosService.put(
+        `https://votyserve.herokuapp.com/voter/${voter.voterId}/${selectedCandidate.candidateId}`
+      );
+      console.log(909, result.data.data);
+      setStage("feedback");
+      setModalVisible(!modalVisible);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar
@@ -125,7 +139,7 @@ export default function Home({ navigation }) {
           onPress={() => navigation.goBack()}
         />
         <Text style={styles.logoText}>{`Good day, ${
-          voter?.firstName || ""
+          voter?.firstName || voter?.lastName
         }`}</Text>
       </View>
       {/* <View style={styles.headerSpacer}>
@@ -205,7 +219,6 @@ export default function Home({ navigation }) {
                     console.log(123456, selectedCandidate);
                   }}
                 />
-                // <Text>{i.lastName}</Text>
               ))}
             </ScrollView>
           </View>
@@ -230,16 +243,20 @@ export default function Home({ navigation }) {
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
-                    setModalVisible(!modalVisible);
-                    setStage("feedback");
+                    // setModalVisible(!modalVisible);
+
                     // call the vote route
+                    handleVote();
                   }}
                 >
                   <Text style={styles.textStyle}>Yes</Text>
                 </Pressable>
                 <Pressable
                   style={[styles.button, styles.buttonCancel]}
-                  onPress={() => setModalVisible(!modalVisible)}
+                  onPress={() => {
+                    console.log("cancelled");
+                    setModalVisible(!modalVisible);
+                  }}
                 >
                   <Text style={styles.textStyle}>Not sure, Cancel</Text>
                 </Pressable>
