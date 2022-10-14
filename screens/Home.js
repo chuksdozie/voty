@@ -78,7 +78,11 @@ export default function Home({ navigation }) {
               icon="checkmark-done"
               onPress={() => navigation.navigate("Vote")}
             />
-            <OptionTag label="View results" icon="bar-chart-outline" />
+            <OptionTag
+              label="View results"
+              icon="bar-chart-outline"
+              onPress={() => navigation.navigate("Result")}
+            />
           </View>
         </View>
       </View>

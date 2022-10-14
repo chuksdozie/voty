@@ -12,6 +12,7 @@ import {
 import Home from "../screens/Home";
 import Next from "../screens/Next";
 import Vote from "../screens/Vote";
+import Result from "../screens/Result";
 
 export default function Navigation({ colorScheme }) {
   return (
@@ -37,6 +38,8 @@ function RootNavigator() {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Vote" component={Vote} />
       <Stack.Screen name="Next" component={Next} />
+      <Stack.Screen name="Result" component={Result} />
+
       {/* <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}
