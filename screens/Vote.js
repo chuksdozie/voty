@@ -138,9 +138,7 @@ export default function Home({ navigation }) {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text style={styles.logoText}>{`Good day, ${
-          voter?.firstName || voter?.lastName
-        }`}</Text>
+        <Text style={styles.logoText}>{"Good day"}</Text>
       </View>
       {/* <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
