@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     display: "flex",
     width: "100%",
     backgroundColor: "orange",
-    marginTop: 20,
+    marginTop: 25,
     alignItems: "center",
     justifyContent: "center",
   },

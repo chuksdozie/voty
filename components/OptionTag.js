@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     width: 130,
     height: 130,
     // borderRadius: 75,
+    borderRadius: 20,
     borderTopEndRadius: 75,
     borderTopStartRadius: 75,
     borderWidth: 1,
@@ -69,8 +70,8 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     // alignItems: "center",
     justifyContent: "center",
-    // borderBottomEndRadius: 75,
-    // borderBottomStartRadius: 75,
+    borderBottomEndRadius: 15,
+    borderBottomStartRadius: 15,
   },
   icon: {
     marginBottom: 10,

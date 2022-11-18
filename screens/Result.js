@@ -117,12 +117,13 @@ export default function Result({ navigation }) {
     console.log(error);
   };
 
-  useEffect(() => {
-    // setCandidate
-    getAllCandidates();
-  }, []);
+  // useEffect(() => {
+  //   // setCandidate
+  //   getAllCandidates();
+  // }, []);
 
   const handleVote = async () => {
+    setLoading(true);
     try {
       // setNameOfCandidates([]);
       // setNumOfVotes([]);
@@ -136,8 +137,11 @@ export default function Result({ navigation }) {
         nameOfCandidates.push(cand.firstName);
         numOfVotes.push(cand.voters.length);
       });
+      setLoading(false);
     } catch (error) {
       console.log(error.response.data);
+      setLoading(false);
+      return;
     }
   };
 
@@ -161,52 +165,58 @@ export default function Result({ navigation }) {
 
       <View style={{ display: "flex", alignItems: "center", marginTop: 100 }}>
         {/* <Text>Bezier Line Chart</Text> */}
-        <View style={styles.timerDiv}>
-          <Text style={styles.clockTextHeader}>Time left for voting</Text>
-          {timeleft && (
-            <Text style={styles.clockText}>
-              {`${timeleft?.days} days : ${timeleft?.hours} hrs : ${timeleft?.minutes} mins : ${timeleft?.seconds} secs` ||
-                ""}
-            </Text>
-          )}
-        </View>
-        <BarChart
-          data={{
-            labels: nameOfCandidates,
-            datasets: [
-              {
-                data: numOfVotes,
-              },
-            ],
-          }}
-          width={Dimensions.get("window").width * 0.9} // from react-native
-          // width={"80%"}
-          height={220}
-          // yAxisLabel="$"
-          // yAxisSuffix="M"
-          yAxisInterval={1} // optional, defaults to 1
-          chartConfig={{
-            backgroundColor: "#6e7a6e",
-            backgroundGradientFrom: "#6e7a6e",
-            backgroundGradientTo: "#ffa726",
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 16,
-            },
-            propsForDots: {
-              r: "6",
-              strokeWidth: "15",
-              stroke: "#ffa726",
-            },
-          }}
-          style={{
-            marginVertical: 8,
-            borderRadius: 5,
-          }}
-        />
-        <Text>Presidential Election Live Polls</Text>
+        {loading ? (
+          <ActivityIndicator size={40} />
+        ) : (
+          <>
+            <View style={styles.timerDiv}>
+              <Text style={styles.clockTextHeader}>Time left for voting</Text>
+              {timeleft && (
+                <Text style={styles.clockText}>
+                  {`${timeleft?.days} days : ${timeleft?.hours} hrs : ${timeleft?.minutes} mins : ${timeleft?.seconds} secs` ||
+                    ""}
+                </Text>
+              )}
+            </View>
+            <BarChart
+              data={{
+                labels: nameOfCandidates,
+                datasets: [
+                  {
+                    data: numOfVotes,
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width * 0.9} // from react-native
+              // width={"80%"}
+              height={220}
+              // yAxisLabel="$"
+              // yAxisSuffix="M"
+              yAxisInterval={1} // optional, defaults to 1
+              chartConfig={{
+                backgroundColor: "#6e7a6e",
+                backgroundGradientFrom: "#6e7a6e",
+                backgroundGradientTo: "#ffa726",
+                decimalPlaces: 2, // optional, defaults to 2dp
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                style: {
+                  borderRadius: 16,
+                },
+                propsForDots: {
+                  r: "6",
+                  strokeWidth: "15",
+                  stroke: "#ffa726",
+                },
+              }}
+              style={{
+                marginVertical: 8,
+                borderRadius: 5,
+              }}
+            />
+            <Text>Presidential Election Live Polls</Text>
+          </>
+        )}
       </View>
     </View>
   );

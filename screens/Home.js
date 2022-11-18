@@ -56,7 +56,7 @@ export default function Home({ navigation }) {
         <Text style={styles.logoText}>Voty</Text>
       </View>
       <View style={styles.timerDiv}>
-        <Text style={styles.clockTextHeader}>Time left to election</Text>
+        <Text style={styles.clockTextHeader}>Time left for voting</Text>
         {timeleft && (
           <Text style={styles.clockText}>
             {`${timeleft?.days} days : ${timeleft?.hours} hrs : ${timeleft?.minutes} mins : ${timeleft?.seconds} secs` ||
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     width: "100%",
     // backgroundColor: "orange",
     marginTop: 0,
-    height: 10,
+    height: 25,
     alignItems: "center",
     justifyContent: "center",
   },
