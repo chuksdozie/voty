@@ -17,27 +17,32 @@ Howbeit, no sensitive information is required through out the entire app
 
 The list of permissions required by the app can be found in the AndroidManifest.xml file:
 
-<uses-permission android:name="android.permission.INTERNET"/>
+### "android.permission.INTERNET"
+
 <p>
 To allow internet access connection. Automatically granted by the system
 </p>
 
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+### "android.permission.READ_EXTERNAL_STORAGE"
+
 <p>
 Automatically granted by the system
 </p>
 
-<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+### "android.permission.SYSTEM_ALERT_WINDOW"
+
 <p>
 For showing pop ups in the app
 </p>
 
-<uses-permission android:name="android.permission.VIBRATE"/>
+### "android.permission.VIBRATE"
+
 <p>
 For phone vibration. Added by default
 </p>
 
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+### "android.permission.WRITE_EXTERNAL_STORAGE"
+
 <p>
 Automatically granted by the system
 </p>
