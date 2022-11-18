@@ -24,6 +24,7 @@ import {
   Modal,
   StatusBar,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import OptionTag from "../components/OptionTag";
 import Candidate from "../components/Candidate";
@@ -154,14 +155,14 @@ export default function Result({ navigation }) {
     handleVote();
   }, []);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* <StatusBar
         translucent={true}
         backgroundColor="rgba(0,0,0,0)"
         barStyle="dark-content"
         showHideTransition="slide"
       /> */}
-      <View style={styles.headerSpacer}></View>
+      {/* <View style={styles.headerSpacer}></View> */}
 
       <View style={{ display: "flex", alignItems: "center", marginTop: 100 }}>
         {/* <Text>Bezier Line Chart</Text> */}
@@ -218,7 +219,7 @@ export default function Result({ navigation }) {
           </>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

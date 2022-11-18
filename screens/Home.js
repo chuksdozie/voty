@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
+  SafeAreaView,
 } from "react-native";
 import OptionTag from "../components/OptionTag";
 import { countdownTimer } from "../utils/countdownTimer";
@@ -43,14 +44,14 @@ export default function Home({ navigation }) {
     }
   }, []);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent={true}
         backgroundColor="rgba(0,0,0,0)"
         barStyle="dark-content"
         showHideTransition="slide"
       />
-      <View style={styles.headerSpacer}></View>
+      {/* <View style={styles.headerSpacer}></View> */}
       <View style={styles.logo}>
         <Ionicons name="pie-chart" color={"#6e7a6e"} size={30} />
         <Text style={styles.logoText}>Voty</Text>
@@ -86,7 +87,7 @@ export default function Home({ navigation }) {
           </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#6e7a6e",
     alignItems: "center",
     // justifyContent: "center",
-    height: "100%",
+    // height: "100%",
   },
   headerSpacer: {
     display: "flex",

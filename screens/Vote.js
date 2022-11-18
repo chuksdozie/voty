@@ -23,6 +23,7 @@ import {
   Modal,
   StatusBar,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import OptionTag from "../components/OptionTag";
 import Candidate from "../components/Candidate";
@@ -122,14 +123,14 @@ export default function Home({ navigation }) {
     }
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         translucent={true}
         backgroundColor="rgba(0,0,0,0)"
         barStyle="dark-content"
         showHideTransition="slide"
       />
-      <View style={styles.headerSpacer}></View>
+      {/* <View style={styles.headerSpacer}></View> */}
 
       <View style={styles.logo}>
         <Ionicons
@@ -138,7 +139,7 @@ export default function Home({ navigation }) {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text style={styles.logoText}>{"Good day"}</Text>
+        <Text style={styles.logoText}>{`Hello`}</Text>
       </View>
       {/* <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
@@ -207,7 +208,7 @@ export default function Home({ navigation }) {
               {candidates.map((i, index) => (
                 <Candidate
                   key={index}
-                  name={`${i.lastName} ${i.lastName}`}
+                  name={`${i.firstName} ${i.lastName}`}
                   candidateId={i.candidateId}
                   party={i.party}
                   icon="person"
@@ -280,7 +281,7 @@ export default function Home({ navigation }) {
           </View>
         </View>
       ) : null}
-    </View>
+    </SafeAreaView>
   );
 }
 
