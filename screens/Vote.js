@@ -203,7 +203,9 @@ export default function Home({ navigation }) {
         <View style={styles.mainContainer}>
           <View style={styles.header}>
             {/* <Image source={}/> */}
-            <Text style={styles.nameText}>Who would you like to vote for?</Text>
+            <Text
+              style={styles.nameText}
+            >{`${voter.firstName}, who would you like to vote for?`}</Text>
             <ScrollView style={styles.optionContainer}>
               {candidates.map((i, index) => (
                 <Candidate
