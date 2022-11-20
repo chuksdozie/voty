@@ -13,6 +13,7 @@ import {
   Image,
   StatusBar,
   SafeAreaView,
+  ImageBackground,
 } from "react-native";
 import OptionTag from "../components/OptionTag";
 import { countdownTimer } from "../utils/countdownTimer";
@@ -45,48 +46,56 @@ export default function Home({ navigation }) {
   }, []);
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        translucent={true}
-        backgroundColor="rgba(0,0,0,0)"
-        barStyle="dark-content"
-        showHideTransition="slide"
-      />
       {/* <View style={styles.headerSpacer}></View> */}
-      <View style={styles.logo}>
-        <Ionicons name="pie-chart" color={"#6e7a6e"} size={30} />
-        <Text style={styles.logoText}>Voty</Text>
-      </View>
-      <View style={styles.timerDiv}>
-        <Text style={styles.clockTextHeader}>Time left for voting</Text>
-        {timeleft && (
-          <Text style={styles.clockText}>
-            {`${timeleft?.days} days : ${timeleft?.hours} hrs : ${timeleft?.minutes} mins : ${timeleft?.seconds} secs` ||
-              ""}
-          </Text>
-        )}
-      </View>
-      {/* <View style={styles.headerSpacer}>
+      <ImageBackground
+        source={{
+          uri: "https://image.cnbcfm.com/api/v1/image/106769063-1603992736952-gettyimages-1282036070-em5_0770_2020102413320043.jpeg",
+        }}
+        resizeMode="cover"
+        style={{ width: "100%", height: "110%" }}
+      >
+        <StatusBar
+          translucent={true}
+          backgroundColor="rgba(250,250,250,1)"
+          barStyle="dark-content"
+          showHideTransition="slide"
+        />
+        <View style={styles.logo}>
+          <Ionicons name="pie-chart" color={"#6e7a6e"} size={30} />
+          <Text style={styles.logoText}>Voty</Text>
+        </View>
+        <View style={styles.timerDiv}>
+          <Text style={styles.clockTextHeader}>Time left for voting</Text>
+          {timeleft && (
+            <Text style={styles.clockText}>
+              {`${timeleft?.days} days : ${timeleft?.hours} hrs : ${timeleft?.minutes} mins : ${timeleft?.seconds} secs` ||
+                ""}
+            </Text>
+          )}
+        </View>
+        {/* <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
       </View> */}
-      <View style={styles.mainContainer}>
-        <View style={styles.header}>
-          {/* <Image source={}/> */}
+        <View style={styles.mainContainer}>
+          <View style={styles.header}>
+            {/* <Image source={}/> */}
 
-          <Text style={styles.nameText}>I am here to</Text>
-          <View style={styles.optionContainer}>
-            <OptionTag
-              label="Place a vote"
-              icon="checkmark-done"
-              onPress={() => navigation.navigate("Vote")}
-            />
-            <OptionTag
-              label="View results"
-              icon="bar-chart-outline"
-              onPress={() => navigation.navigate("Result")}
-            />
+            <Text style={styles.nameText}>I am here to</Text>
+            <View style={styles.optionContainer}>
+              <OptionTag
+                label="Place a vote"
+                icon="checkmark-done"
+                onPress={() => navigation.navigate("Vote")}
+              />
+              <OptionTag
+                label="View results"
+                icon="bar-chart-outline"
+                onPress={() => navigation.navigate("Result")}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
@@ -95,7 +104,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "#6e7a6e",
+    // backgroundColor: "#6e7a6e",
     alignItems: "center",
     // justifyContent: "center",
     // height: "100%",
@@ -123,7 +132,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    backgroundColor: "whitesmoke",
+    backgroundColor: "rgba(250,250,250, 0.9)",
     marginTop: 20,
     height: 50,
     paddingHorizontal: 10,
@@ -134,7 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    backgroundColor: "whitesmoke",
+    backgroundColor: "rgba(250,250,250,.9)",
     paddingHorizontal: 10,
   },
   logoText: {
@@ -145,7 +154,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     display: "flex",
-    backgroundColor: "whitesmoke",
+    backgroundColor: "rgba(250,250,250, 0.9)",
     height: "100%",
     width: "100%",
     // alignSelf: "center",
@@ -155,7 +164,7 @@ const styles = StyleSheet.create({
   optionContainer: {
     display: "flex",
     flexDirection: "row",
-    backgroundColor: "whitesmoke",
+    // backgroundColor: "whitesmoke",
     width: "100%",
     alignSelf: "center",
     // alignItems: "center",
