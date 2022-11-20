@@ -62,6 +62,12 @@ export default function Home({ navigation }) {
         setLoading(false);
         return;
       }
+      if (verifiedVoter[0].voted) {
+        setError("You have already voted. Thanks");
+        setErrorModalVisible(true);
+        setLoading(false);
+        return;
+      }
       await storeData("voter", JSON.stringify(verifiedVoter[0]));
       setVoter(verifiedVoter[0]);
       setStage("voting");
