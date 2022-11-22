@@ -131,7 +131,7 @@ export default function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        translucent={true}
+        // translucent={true}
         backgroundColor="rgba(0,0,0,0)"
         barStyle="dark-content"
         showHideTransition="slide"
@@ -145,7 +145,7 @@ export default function Home({ navigation }) {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Text style={styles.logoText}>{`Hello`}</Text>
+        <Text style={styles.logoText}>{`Hello ${voter?.firstName || ""}`}</Text>
       </View>
       {/* <View style={styles.headerSpacer}>
         <Ionicons name="person-circle" color={"#86c0c6"} size={70} />
@@ -157,7 +157,7 @@ export default function Home({ navigation }) {
             <Text style={styles.nameText}>Please enter your voting ID</Text>
             <TextInput
               style={styles.inputBox}
-              placeholder={"Example: VXD-7w84d"}
+              placeholder={"Example: VXD-852-640"}
               textAlign="center"
               selectionColor={"#6e7a6e"}
               value={voterId}
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     backgroundColor: "whitesmoke",
-    marginTop: 20,
+    // marginTop: 20,
     height: 50,
     paddingHorizontal: 10,
   },

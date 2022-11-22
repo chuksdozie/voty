@@ -167,7 +167,7 @@ export default function Result({ navigation }) {
       <View style={{ display: "flex", alignItems: "center", marginTop: 100 }}>
         {/* <Text>Bezier Line Chart</Text> */}
         {loading ? (
-          <ActivityIndicator size={40} />
+          <ActivityIndicator size={80} color={"#647343"} />
         ) : (
           <>
             <View style={styles.timerDiv}>
