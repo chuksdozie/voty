@@ -1,4 +1,6 @@
+// package com.mysplashscreen;
 package com.devchuks.voty;
+
 
 import android.os.Build;
 import android.os.Bundle;
@@ -9,15 +11,19 @@ import com.facebook.react.ReactRootView;
 
 import expo.modules.ReactActivityDelegateWrapper;
 
+
+import com.facebook.react.ReactActivity;
+import org.devio.rn.splashscreen.SplashScreen; // here
+
 public class MainActivity extends ReactActivity {
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    // Set the theme to AppTheme BEFORE onCreate to support 
-    // coloring the background, status bar, and navigation bar.
-    // This is required for expo-splash-screen.
-    setTheme(R.style.AppTheme);
-    super.onCreate(null);
-  }
+  // @Override
+  // protected void onCreate(Bundle savedInstanceState) {
+  //   // Set the theme to AppTheme BEFORE onCreate to support 
+  //   // coloring the background, status bar, and navigation bar.
+  //   // This is required for expo-splash-screen.
+  //   setTheme(R.style.AppTheme);
+  //   super.onCreate(null);
+  // }
 
   /**
    * Returns the name of the main component registered from JavaScript.
@@ -54,4 +60,18 @@ public class MainActivity extends ReactActivity {
     // because it's doing more than {@link Activity#moveTaskToBack} in fact.
     super.invokeDefaultOnBackPressed();
   }
+  // /**
+  //  * Returns the name of the main component registered from JavaScript. This is used to schedule
+  //  * rendering of the component.
+  //  */
+  // @Override
+  // protected String getMainComponentName() {
+  //   return "devchuks.voty";
+  // }
+
+  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }
 }
