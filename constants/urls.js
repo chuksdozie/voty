@@ -1,5 +1,6 @@
 const URLS = {
-  baseUrl: `https://votyserve.herokuapp.com`,
+  // baseUrl: `https://votyserve.herokuapp.com`,
+  baseUrl: `https://goldfish-app-66sp7.ondigitalocean.app`,
 };
 
 //THESE ARE THE AVAILABLE URLS
