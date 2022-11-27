@@ -7,7 +7,7 @@ import axiosService from "../utils/axiosService";
 import { getVoters, getCandidates } from "../constants/urls";
 import { storeData } from "../utils/db";
 import { ActivityIndicator } from "react-native";
-
+import NetInfo from "@react-native-community/netinfo";
 import {
   Animated,
   Button,
@@ -101,13 +101,47 @@ export default function Home({ navigation }) {
       Updates.reloadAsync();
     }
   }, []);
+
+  const formatVoterId = (value) => {
+    //See: https://tomduffytech.com/how-to-format-phone-number-in-react/
+    let output;
+    if (!value) {
+      output = "";
+      setVoterId(output);
+      return "";
+    }
+    let votingId = value.replace(/-/g, "");
+    // votingId = votingId.toUpperCase();
+
+    const votingIdLength = votingId.length;
+    if (votingIdLength < 4) {
+      output = votingId;
+      setVoterId(output);
+      return;
+    }
+    if (votingIdLength < 7) {
+      output = `${votingId.slice(0, 3)}-${votingId.slice(3, 6)}`;
+      setVoterId(output);
+      return;
+    }
+    output = `${votingId.slice(0, 3)}-${votingId.slice(3, 6)}-${votingId.slice(
+      6,
+      9
+    )}`;
+    setVoterId(output);
+    return;
+  };
+
   const handleVoterIdChange = (e) => {
     console.log(e);
     setVoterId(e);
     console.log(voterId);
   };
   const submitVoterId = () => {
-    getAllVoterIds(voterId);
+    // setVoterId(voterId.replace(/-/g, "").toUpperCase());
+    const votingId = voterId.replace(/-/g, "").toUpperCase();
+    console.log(votingId);
+    getAllVoterIds(votingId);
     console.log(error);
   };
 
@@ -128,6 +162,24 @@ export default function Home({ navigation }) {
       console.log(error.response.data);
     }
   };
+
+  // listen for network
+  const unsubscribe = NetInfo.addEventListener((state) => {
+    console.log("Connection type: ", state.type);
+    console.log("is connected? :", state.isConnected);
+    if (Platform.OS === "android") {
+      NetInfo.fetch().then((state) => {
+        console.log(state.isConnected);
+        if (!state.isConnected) {
+          setError("No internet access");
+          setErrorModalVisible(true);
+          setLoading(false);
+          return;
+        }
+      });
+    }
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -161,7 +213,8 @@ export default function Home({ navigation }) {
               textAlign="center"
               selectionColor={"#6e7a6e"}
               value={voterId}
-              onChangeText={(e) => handleVoterIdChange(e)}
+              // onChangeText={(e) => handleVoterIdChange(e)}
+              onChangeText={(e) => formatVoterId(e)}
             />
             <Text style={styles.subText}>
               Please note that, you won't be allowed to vote twice.{"\n"} So be
@@ -209,16 +262,17 @@ export default function Home({ navigation }) {
         <View style={styles.mainContainer}>
           <View style={styles.header}>
             {/* <Image source={}/> */}
-            <Text
-              style={styles.nameText}
-            >{`${voter.firstName}, who would you like to vote for?`}</Text>
+            <Text style={styles.nameText}>{`${
+              voter?.firstName ?? ""
+            }, who would you like to vote for?`}</Text>
             <ScrollView style={styles.optionContainer}>
               {candidates.map((i, index) => (
                 <Candidate
                   key={index}
                   name={`${i.firstName} ${i.lastName}`}
-                  candidateId={i.candidateId}
+                  // candidateId={i.candidateId}
                   party={i.party}
+                  candidatePicture={i.picture}
                   icon="person"
                   onPress={() => {
                     setModalVisible(!modalVisible);

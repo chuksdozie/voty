@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Icon from "react-native-ionicons";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import registeredVotersData from "../data/registeredVotersData";
 // import { candidates } from "../data/candidatesData";
@@ -8,7 +8,7 @@ import { getVoters, getCandidates } from "../constants/urls";
 import { storeData } from "../utils/db";
 import { ActivityIndicator } from "react-native";
 import { countdownTimer } from "../utils/countdownTimer";
-
+import VerticalBarGraph from "@chartiful/react-native-vertical-bar-graph";
 import {
   Animated,
   Button,
@@ -24,8 +24,11 @@ import {
   Modal,
   StatusBar,
   Pressable,
+  DevSettings,
   SafeAreaView,
 } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
+import { Ionicons } from "@expo/vector-icons";
 import OptionTag from "../components/OptionTag";
 import Candidate from "../components/Candidate";
 import {
@@ -52,9 +55,11 @@ export default function Result({ navigation }) {
   const [selectedCandidate, setSelectedCandidate] = useState();
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [network, setNetwork] = useState(true);
   const [nameOfCandidates, setNameOfCandidates] = useState([]);
   const [numOfVotes, setNumOfVotes] = useState([]);
   const [timeleft, setTimeleft] = useState(countdownTimer);
+  const [final, setFinal] = useState([]);
   const getAllVoterIds = async (value) => {
     try {
       setLoading(true);
@@ -124,26 +129,51 @@ export default function Result({ navigation }) {
   // }, []);
 
   const handleVote = async () => {
+    if (Platform.OS === "android") {
+      NetInfo.fetch().then((state) => {
+        console.log(state.isConnected);
+        if (!state.isConnected) {
+          setNetwork(false);
+          return;
+        }
+      });
+    }
+    // DevSettings.reload();
     setLoading(true);
+    // candidates = [];
+    setNameOfCandidates([]);
+    // setNumOfVotes([]);
+    setCandidates([]);
     try {
-      // setNameOfCandidates([]);
-      // setNumOfVotes([]);
       const result = await axiosService.get(`/candidate`);
 
       console.log(909, result.data.data);
       // setStage("feedback");
       // setModalVisible(!modalVisible);
-      const candidates = result.data.data;
-      candidates.filter((cand) => {
-        nameOfCandidates.push(cand.firstName);
-        numOfVotes.push(cand.voters.length);
+      const candidatesFetched = result.data.data;
+      // setNameOfCandidates([]);
+      // setNumOfVotes([]);
+      candidatesFetched.filter((cand) => {
+        setNameOfCandidates((arr) => [...arr, cand.firstName]);
+        setNumOfVotes((arr) => [...arr, cand.voters.length]);
+        // nameOfCandidates.push(cand.firstName);
+        // numOfVotes.push(cand.voters.length);
       });
+      setFinal(nameOfCandidates);
       setLoading(false);
     } catch (error) {
       console.log(error.response.data);
       setLoading(false);
       return;
     }
+  };
+
+  const config = {
+    hasXAxisBackgroundLines: false,
+    xAxisLabelStyle: {
+      position: "right",
+      prefix: "$",
+    },
   };
 
   setInterval(function () {
@@ -154,6 +184,10 @@ export default function Result({ navigation }) {
   useEffect(() => {
     handleVote();
   }, []);
+
+  useEffect(() => {
+    console.log(121121212, nameOfCandidates);
+  }, [nameOfCandidates]);
   return (
     <SafeAreaView style={styles.container}>
       {/* <StatusBar
@@ -163,62 +197,92 @@ export default function Result({ navigation }) {
         showHideTransition="slide"
       /> */}
       {/* <View style={styles.headerSpacer}></View> */}
-
-      <View style={{ display: "flex", alignItems: "center", marginTop: 100 }}>
-        {/* <Text>Bezier Line Chart</Text> */}
-        {loading ? (
-          <ActivityIndicator size={80} color={"#647343"} />
-        ) : (
-          <>
-            <View style={styles.timerDiv}>
-              <Text style={styles.clockTextHeader}>Time left for voting</Text>
-              {timeleft && (
-                <Text style={styles.clockText}>
-                  {`${timeleft?.days} days : ${timeleft?.hours} hrs : ${timeleft?.minutes} mins : ${timeleft?.seconds} secs` ||
-                    ""}
-                </Text>
-              )}
-            </View>
-            <BarChart
-              data={{
-                labels: nameOfCandidates,
-                datasets: [
-                  {
-                    data: numOfVotes,
+      {network ? (
+        <View style={{ display: "flex", alignItems: "center", marginTop: 100 }}>
+          {/* <Text>Bezier Line Chart</Text> */}
+          {loading ? (
+            <ActivityIndicator size={80} color={"#647343"} />
+          ) : (
+            <>
+              <View style={styles.timerDiv}>
+                <Text style={styles.clockTextHeader}>Time left for voting</Text>
+                {timeleft && (
+                  <Text style={styles.clockText}>
+                    {`${timeleft?.days} days : ${timeleft?.hours} hrs : ${timeleft?.minutes} mins : ${timeleft?.seconds} secs` ||
+                      ""}
+                  </Text>
+                )}
+              </View>
+              <BarChart
+                data={{
+                  labels: nameOfCandidates,
+                  datasets: [
+                    {
+                      data: numOfVotes,
+                    },
+                  ],
+                }}
+                width={Dimensions.get("window").width * 0.9} // from react-native
+                // width={"80%"}
+                height={220}
+                // yAxisLabel="$"
+                // yAxisSuffix="M"
+                yAxisInterval={1} // optional, defaults to 1
+                chartConfig={{
+                  backgroundColor: "#6e7a6e",
+                  backgroundGradientFrom: "#6e7a6e",
+                  backgroundGradientTo: "#ffa726",
+                  decimalPlaces: 2, // optional, defaults to 2dp
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) =>
+                    `rgba(255, 255, 255, ${opacity})`,
+                  style: {
+                    borderRadius: 16,
                   },
-                ],
-              }}
-              width={Dimensions.get("window").width * 0.9} // from react-native
-              // width={"80%"}
-              height={220}
-              // yAxisLabel="$"
-              // yAxisSuffix="M"
-              yAxisInterval={1} // optional, defaults to 1
-              chartConfig={{
-                backgroundColor: "#6e7a6e",
-                backgroundGradientFrom: "#6e7a6e",
-                backgroundGradientTo: "#ffa726",
-                decimalPlaces: 2, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {
-                  borderRadius: 16,
-                },
-                propsForDots: {
-                  r: "6",
-                  strokeWidth: "15",
-                  stroke: "#ffa726",
-                },
-              }}
-              style={{
-                marginVertical: 8,
-                borderRadius: 5,
-              }}
-            />
-            <Text>Presidential Election Live Polls</Text>
-          </>
-        )}
-      </View>
+                  propsForDots: {
+                    r: "6",
+                    strokeWidth: "15",
+                    stroke: "#ffa726",
+                  },
+                }}
+                style={{
+                  marginVertical: 8,
+                  borderRadius: 5,
+                }}
+              />
+              <Text>Presidential Election Live Polls</Text>
+            </>
+          )}
+        </View>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#6e7a6e",
+          }}
+        >
+          <TouchableOpacity
+            style={styles.reloadIcon}
+            // onPress={() => handleVote()}
+          >
+            <Ionicons name="wifi" size={30} color={"white"} />
+          </TouchableOpacity>
+          <Text
+            style={{
+              color: "#6e7a6e",
+              margin: 10,
+            }}
+          >
+            No Internet
+          </Text>
+        </View>
+      )}
+
+      {/* <TouchableOpacity style={styles.reloadIcon} onPress={() => handleVote()}>
+        <Ionicons name="refresh" size={30} color={"white"} />
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 }
@@ -427,5 +491,16 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 17,
     textAlign: "center",
+  },
+  reloadIcon: {
+    height: 40,
+    width: 40,
+    borderRadius: 100,
+    // position: "absolute",
+    // bottom: 30,
+    // right: 30,
+    backgroundColor: "#6e7a6e",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

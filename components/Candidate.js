@@ -16,7 +16,15 @@ import {
 // import { Text, View } from "../components/Themed";
 
 export default function Candidate(props) {
-  const { navigation, name, party, candidateId, icon, onPress } = props;
+  const {
+    navigation,
+    name,
+    party,
+    candidateId,
+    icon,
+    onPress,
+    candidatePicture,
+  } = props;
   const onReloadPress = useCallback(() => {
     if (Platform.OS === "web") {
       location.reload();
@@ -28,12 +36,29 @@ export default function Candidate(props) {
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <View style={styles.container}>
         <View style={styles.left}>
-          <Ionicons name={icon} size={30} style={styles.icon} />
+          {/* <Ionicons name={icon} size={30} style={styles.icon} /> */}
+          <Image
+            source={{
+              // uri: "https://media.premiumtimesng.com/wp-content/files/2022/10/78f1dc4e-142f-44e4-a328-f15724fe63d4_peter-obi.jpg",
+              // uri: "https://media.premiumtimesng.com/wp-content/files/2017/01/atiku-abubakar.jpg",
+              // uri: "https://media.premiumtimesng.com/wp-content/files/2022/01/Bola-Ahmed-Tinubu-.png",
+              uri: candidatePicture,
+            }}
+            resizeMode="cover"
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              zIndex: -1,
+              borderBottomLeftRadius: 8,
+              borderTopLeftRadius: 8,
+            }}
+          />
         </View>
         <View style={styles.right}>
-          <View style={styles.id}>
+          {/* <View style={styles.id}>
             <Text style={styles.candidateIdText}>{candidateId}</Text>
-          </View>
+          </View> */}
           <Text style={styles.candidateText}>{name}</Text>
           <View style={styles.line}></View>
           <Text style={styles.partyText}>{party}</Text>
@@ -57,7 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#6e7a6e",
     marginVertical: 10,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
   },
   mainContainer: {
     display: "flex",
@@ -73,7 +98,8 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
     height: "100%",
     width: "25%",
-    paddingVertical: 10,
+
+    // paddingVertical: 10,
     alignSelf: "flex-end",
     alignItems: "center",
     justifyContent: "center",
@@ -92,6 +118,7 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 8,
     borderLeftWidth: 1,
     borderLeftColor: "#6e7a6e",
+    paddingHorizontal: 10,
     // borderBottomStartRadius: 8,
   },
   line: {
